@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>News</title>
+  <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet">
+  <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.19/angular.min.js"></script>
+  <script src="angular-routers.js"></script>
+  
+  <!--including router-->
+  <script src="//angular-ui.github.io/ui-router/release/angular-ui-router.js"></script>
+</head>
+<body ng-app="News" ng-controller="MainCtrl">
+  <div class="row">
+    <div class="col-md-6 col-md-offset-3">
+      <ui-view></ui-view>
+    </div>
+  </div>
+  
+  <!-- This lets you put the code for multiple webpages on one page -->
+  <script type="text/ng-template" id="/home.html">
+    <div class="page-header"> 
+      <h1>News</h1>
+    </div>
+  
+    <form ng-submit="addPost()" style = "margin-top30px;">
+      <input type="text" ng-model="formContent"></input>
+      <button type="submit">Post</button>
+    </form>
+    <div>
+      {{test}}
+    </div>
+    <!--'post' could be anything. it just becomes our local variable-->
+    <div ng-repeat="post in posts | orderBy: '-upvotes'">
+    <span class="glyphicon glyphicon-thumbs-up" ng-click="incrementUpvotes(post)"></span>
+      {{post.title}} - upvotes: {{post.upvotes}}
+      <a href="#/posts/{{posts.indexOf(post)}}">Comments</a>
+    </div>
+  </script>
+  
+  <!-- this is a second template, it will be posted when it is accessed -->
+  <script type="text/ng-template" id="/posts.html">
+    <div class="page-header">
+      <h3>
+          {{post.title}}
+      </h3>
+    </div>
+
+    <div ng-repeat="comment in post.comments | orderBy:'-upvotes'">
+      <span class="glyphicon glyphicon-thumbs-up"
+        ng-click="incrementUpvotes(comment)"></span>
+      {{comment.upvotes}}
+      <span style="font-size:20px; margin-left:10px;">
+        {{comment.body}}
+      </span>
+    </div>
+    <form ng-submit="addComment()"
+      style="margin-top:30px;">
+      <h3>Add a new comment</h3>
+
+      <div class="form-group">
+        <input type="text"
+        class="form-control"
+        placeholder="Comment"
+        ng-model="body"></input>
+      </div>
+      <button type="submit" class="btn btn-primary">Post</button>
+    </form>
+  </script>
+  
+</body>
+</html>
